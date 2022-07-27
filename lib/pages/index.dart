@@ -73,7 +73,8 @@ class IndexPage extends StatelessWidget {
                 SizedBox(width: 10.w),
                 Obx(
                   () => ElevatedButton(
-                    onPressed: ytdlController.isDownloading.value
+                    onPressed: ytdlController.items.isEmpty ||
+                            ytdlController.isDownloading.value
                         ? null
                         : () {
                             ytdlController.download();

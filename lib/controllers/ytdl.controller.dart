@@ -31,6 +31,13 @@ class YTDLController extends GetxController {
     var clipboardData = await Clipboard.getData('text/plain');
     var url = clipboardData!.text ?? '';
 
+    Get.snackbar(
+      '디버깅',
+      url,
+      margin: EdgeInsets.only(top: 20.h),
+      maxWidth: Sizes.designWidth.w * 0.95,
+    );
+
     if (url.isEmpty) {
       Get.snackbar(
         '불러오기 오류',
@@ -57,6 +64,13 @@ class YTDLController extends GetxController {
       Get.snackbar(
         '불러오기 오류',
         '복사한 URL이 올바르지 않습니다.',
+        margin: EdgeInsets.only(top: 20.h),
+        maxWidth: Sizes.designWidth.w * 0.95,
+      );
+
+      Get.snackbar(
+        '디버깅',
+        e.toString(),
         margin: EdgeInsets.only(top: 20.h),
         maxWidth: Sizes.designWidth.w * 0.95,
       );
