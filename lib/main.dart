@@ -5,9 +5,11 @@ import 'package:get_storage/get_storage.dart';
 
 import 'package:ytdl/config/theme.dart';
 import 'package:ytdl/routes/index.dart';
+import 'package:ytdl/utils/LocalNotification.dart';
 
 void main() async {
   await GetStorage.init();
+  await LocalNotification.init();
 
   runApp(const MyApp());
 }
@@ -17,28 +19,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // 화면을 터치시 현재 포커스를 off
-        // 주의: 작동이 안되면 Container 위젯에 colors: Colors.transparent 추가 (터치 영역으로 선언이 안되어서 그럼)
-        FocusScopeNode currentFocus = FocusScope.of(context);
-
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
+    return ScreenUtilInit(
+      designSize: Size(Sizes.defaultDesignWidth, Sizes.defaultDesignHeight),
+      builder: (context, mediaQuery) {
+        return GetMaterialApp(
+          title: 'YTDL',
+          debugShowCheckedModeBanner: false,
+          theme: createAppTheme(context),
+          initialRoute: '/',
+          getPages: AppPages.routes,
+        );
       },
-      child: ScreenUtilInit(
-        designSize: Size(Sizes.defaultDesignWidth, Sizes.defaultDesignHeight),
-        builder: (context, mediaQuery) {
-          return GetMaterialApp(
-            title: 'YTDL',
-            debugShowCheckedModeBanner: false,
-            theme: createAppTheme(context),
-            initialRoute: '/',
-            getPages: AppPages.routes,
-          );
-        },
-      ),
     );
   }
 }

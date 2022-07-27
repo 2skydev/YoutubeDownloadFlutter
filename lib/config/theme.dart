@@ -13,7 +13,7 @@ class Sizes {
 }
 
 class Palette {
-  static Color primary = const Color(0xFFe6474b);
+  static Color primary = const Color(0xFF3f51b5);
   static Color secondary = const Color(0XFF00E4B5);
 
   static Color kakao = const Color(0xFFFFE500);
