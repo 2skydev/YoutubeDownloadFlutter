@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:ytdl/components/ConfirmBottomSheet/index.dart';
+import 'package:ytdl/components/SelectBottomSheet/index.dart';
 
 import 'package:ytdl/components/Template/index.dart';
 import 'package:ytdl/components/VideoItem/index.dart';
@@ -18,19 +20,6 @@ class IndexPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           children: [
-            // TextField(
-            //   controller: TextEditingController(
-            //     text: ytdlController.url.value,
-            //   ),
-            //   decoration: InputDecoration(
-            //     border: OutlineInputBorder(),
-            //     hintText: '재생목록 또는 영상 URL',
-            //     hintStyle: TextStyle(fontSize: 14.sp),
-            //   ),
-            //   onChanged: (value) {
-            //     ytdlController.url.value = value;
-            //   },
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -77,7 +66,26 @@ class IndexPage extends StatelessWidget {
                             ytdlController.isDownloading.value
                         ? null
                         : () {
-                            ytdlController.download();
+                            showSelectBottomSheet(
+                              title: '다운로드 형식',
+                              options: [
+                                {
+                                  'value': 'video',
+                                  'label': '비디오',
+                                  'description': 'video + audio',
+                                },
+                                {
+                                  'value': 'audio',
+                                  'label': '오디오',
+                                  'description': 'audio only',
+                                },
+                              ],
+                              onChange: (option) {
+                                ytdlController.download(
+                                  audioOnly: option['value'] == 'audio',
+                                );
+                              },
+                            );
                           },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
