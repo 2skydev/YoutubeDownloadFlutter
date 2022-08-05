@@ -106,8 +106,12 @@ class YTDLController extends GetxController {
         if (streamInfo != null) {
           var stream = yt.videos.streamsClient.get(streamInfo);
 
+          // var file = File(
+          //   '$savePath/${item.video.title.replaceAll(RegExp(r'[!@#$%^&*(),.?":{}|<>]'), '')}.${streamInfo.container}',
+          // );
+
           var file = File(
-            '$savePath/${item.video.title.replaceAll(RegExp(r'[!@#$%^&*(),.?":{}|<>]'), '')}.${streamInfo.container}',
+            '$savePath/${item.video.title.replaceAll(RegExp(r'[!@#$%^&*(),.?":{}|<>]'), '')}.mp3',
           );
 
           var fileStream = file.openWrite();
