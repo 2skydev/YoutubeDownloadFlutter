@@ -1,16 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:throttling/throttling.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:ytdl/utils/LocalNotification.dart';
 import 'package:ytdl/utils/index.dart';
-
-import '../config/theme.dart';
 
 const String savePath = '/storage/emulated/0/Download/YTDL';
 
@@ -23,6 +19,7 @@ class YTDLItem {
 }
 
 class YTDLController extends GetxController {
+  MethodChannel mediaStoreChannel = const MethodChannel('flutter_media_store');
   YoutubeExplode yt = YoutubeExplode();
 
   RxBool isFetching = false.obs;
@@ -105,10 +102,12 @@ class YTDLController extends GetxController {
 
         if (streamInfo != null) {
           var stream = yt.videos.streamsClient.get(streamInfo);
+          var filename = item.video.title
+              .replaceAll(RegExp(r'[!@#$%^&*(),.?":{}|<>]'), '');
+          var ext = audioOnly ? 'mp3' : streamInfo.container;
+          var path = '$savePath/$filename.$ext';
 
-          var file = File(
-            '$savePath/${item.video.title.replaceAll(RegExp(r'[!@#$%^&*(),.?":{}|<>]'), '')}.${audioOnly ? 'mp3' : streamInfo.container}',
-          );
+          var file = File(path);
 
           var fileStream = file.openWrite();
 
@@ -142,9 +141,24 @@ class YTDLController extends GetxController {
             return data;
           }).pipe(fileStream);
 
-          // Close the file.
           await fileStream.flush();
           await fileStream.close();
+
+          print('add${audioOnly ? 'Audio' : 'Video'}Item');
+          print(path);
+          print(filename);
+          print(ext);
+
+          if (audioOnly) {
+            await mediaStoreChannel
+                .invokeMethod('add${audioOnly ? 'Audio' : 'Video'}Item', {
+              'path': path,
+              'name': filename,
+              'ext': ext,
+            });
+
+            await file.delete();
+          }
 
           item.downloadStatus.value = 'done';
         } else {
@@ -167,7 +181,8 @@ class YTDLController extends GetxController {
       playSound: true,
     );
 
-    snackbar('다운로드 완료', '다운로드가 완료되었습니다.\n다운로드 경로: 내장 메모리 > 다운로드 > YTDL');
+    snackbar('다운로드 완료',
+        '다운로드가 완료되었습니다.\n다운로드 경로: ${audioOnly ? '음악 > YTDL' : '다운로드 > YTDL'}');
 
     isDownloading.value = false;
   }

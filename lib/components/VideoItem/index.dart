@@ -44,7 +44,7 @@ class VideoItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.w),
               child: SizedBox(
                 width: 50.w,
-                height: 50.h,
+                height: 50.w,
                 child: Image.network(
                   item.video.thumbnails.mediumResUrl,
                   fit: BoxFit.cover,
@@ -109,7 +109,7 @@ class VideoItem extends StatelessWidget {
                         },
                         child: Container(
                           width: 40.w,
-                          height: 40.h,
+                          height: 40.w,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.w),
                             border: Border.all(
@@ -126,7 +126,7 @@ class VideoItem extends StatelessWidget {
                       )
                     : Container(
                         width: 40.w,
-                        height: 40.h,
+                        height: 40.w,
                         padding: EdgeInsets.all(5.w),
                         child: Stack(
                           children: [
